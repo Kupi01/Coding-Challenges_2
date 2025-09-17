@@ -209,3 +209,30 @@ export const returnBook = (id: string): Book | null => {
 export const getRecommendations = (): Book[] => {
     return structuredClone(books.slice(0, 3));
 };
+
+/**
+ * Gets statistics about the book collection.
+ *
+ * @returns {object} Object containing totalBooks, availableBooks, borrowedBooks, and genreBreakdown
+ *
+ * @example
+ * const stats = getBookStats();
+ * console.log(`Total books: ${stats.totalBooks}`);
+ */
+export const getBookStats = () => {
+    const totalBooks = books.length;
+    const availableBooks = books.filter(book => !book.isBorrowed).length;
+    const borrowedBooks = books.filter(book => book.isBorrowed).length;
+
+    const genreBreakdown: { [genre: string]: number } = {};
+    books.forEach(book => {
+        genreBreakdown[book.genre] = (genreBreakdown[book.genre] || 0) + 1;
+    });
+
+    return {
+        totalBooks,
+        availableBooks,
+        borrowedBooks,
+        genreBreakdown,
+    };
+};
